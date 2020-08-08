@@ -17,7 +17,7 @@ function Card({ onCardClick, card, link, name, likes }) {
         role="img"
         style={{ backgroundImage: `url(${link})` }}
         onClick={handleClick}
-      ></div>
+      />
       <article className="elements__item-bottom">
         <h4 className="elements__item-title">{name}</h4>
         <div className="elements__like-container">

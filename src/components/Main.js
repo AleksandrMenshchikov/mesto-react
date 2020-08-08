@@ -23,21 +23,12 @@ function Main({
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
-    api
-      .getUserData()
+    Promise.all([api.getUserData(), api.getInitialCards()])
       .then((data) => {
-        setUserName(data.name);
-        setUserDescription(data.about);
-        setUserAvatar(data.avatar);
-      })
-      .catch((err) => console.error(err));
-  }, []);
-
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((data) => {
-        setCards([...data]);
+        setUserName(data[0].name);
+        setUserDescription(data[0].about);
+        setUserAvatar(data[0].avatar);
+        setCards([...data[1]]);
       })
       .catch((err) => console.error(err));
   }, []);
