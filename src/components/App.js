@@ -32,7 +32,8 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setIsImageCardPopupOpen(false)
+    setIsImageCardPopupOpen(false);
+    setTimeout(() => setSelectedCard({}), 200);
   }
 
   React.useEffect(() => {
