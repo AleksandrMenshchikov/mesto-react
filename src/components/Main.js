@@ -31,7 +31,7 @@ function Main({
         <div className="profile__info">
           <div className="profile__info-top">
             <h2 className="profile__title">
-              {currentUser.name || "Loading..."}
+              {currentUser.name || "Загрузка..."}
             </h2>
             <button
               type="button"
@@ -41,7 +41,7 @@ function Main({
             />
           </div>
           <p className="profile__subtitle">
-            {currentUser.about || "Loading..."}
+            {currentUser.about || "Загрузка..."}
           </p>
         </div>
         <button
