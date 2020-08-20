@@ -3,7 +3,7 @@ import loadingGif from "../images/loading-gif1.gif";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import Card from "./Card";
-import { api } from "../utils/api.js";
+import CurrentUserContext from "../contexts/CurrentUserContext";
 
 function Main({
   onEditAvatar,
@@ -13,32 +13,18 @@ function Main({
   isImageCardPopupOpen,
   onClose,
   selectedCard,
-  isEditProfilePopupOpen,
-  isAddPlacePopupOpen,
-  isEditAvatarPopupOpen,
+  cards,
+  onCardLike,
+  onCardDelete,
 }) {
-  const [userName, setUserName] = React.useState();
-  const [userDescription, setUserDescription] = React.useState();
-  const [userAvatar, setUserAvatar] = React.useState();
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    Promise.all([api.getUserData(), api.getInitialCards()])
-      .then((data) => {
-        setUserName(data[0].name);
-        setUserDescription(data[0].about);
-        setUserAvatar(data[0].avatar);
-        setCards([...data[1]]);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+  const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <>
       <section className="profile page__profile">
         <div className="profile__avatar-container" onClick={onEditAvatar}>
           <img
-            src={userAvatar ? userAvatar : loadingGif}
+            src={currentUser.avatar || loadingGif}
             alt="Фотография"
             className="profile__avatar"
           />
@@ -46,7 +32,7 @@ function Main({
         <div className="profile__info">
           <div className="profile__info-top">
             <h2 className="profile__title">
-              {userName ? userName : "Loading..."}
+              {currentUser.name || "Loading..."}
             </h2>
             <button
               type="button"
@@ -56,7 +42,7 @@ function Main({
             />
           </div>
           <p className="profile__subtitle">
-            {userDescription ? userDescription : "Loading..."}
+            {currentUser.about || "Loading..."}
           </p>
         </div>
         <button
@@ -72,11 +58,10 @@ function Main({
           {cards.map((card) => (
             <Card
               key={card._id}
-              link={card.link}
-              name={card.name}
-              likes={card.likes.length}
               onCardClick={onCardClick}
-              card={{ link: card.link, name: card.name }}
+              card={card}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
             />
           ))}
         </ul>
@@ -85,87 +70,8 @@ function Main({
       <ImagePopup
         isOpen={isImageCardPopupOpen}
         onClose={onClose}
-        link={selectedCard.link}
-        description={selectedCard.name}
+        selectedCard={selectedCard}
       />
-
-      <PopupWithForm
-        name="pop-up_profile"
-        title="Редактировать профиль"
-        isOpen={isEditProfilePopupOpen}
-        onClose={onClose}
-      >
-        <div className="form__input-container">
-          <input
-            name="input-name"
-            type="text"
-            className="form__input form__input_name"
-            placeholder="Имя Фамилия"
-            required
-            minLength="2"
-            maxLength="40"
-            pattern="[A-Za-zА-Яа-яЁё\s\-]+"
-          />
-          <span id="input-name-error" className="form__input-error">
-            Ошибка
-          </span>
-        </div>
-        <div className="form__input-container">
-          <input
-            name="input-profession"
-            type="text"
-            className="form__input form__input_profession"
-            placeholder="Профессиональная деятельность"
-            required
-            minLength="2"
-            maxLength="200"
-          />
-          <span id="input-profession-error" className="form__input-error">
-            Ошибка
-          </span>
-        </div>
-        <button type="submit" className="form__input-button" disabled>
-          Сохранить
-        </button>
-      </PopupWithForm>
-
-      <PopupWithForm
-        name="pop-up_card"
-        title="Новое место"
-        isOpen={isAddPlacePopupOpen}
-        onClose={onClose}
-      >
-        <div className="form__input-container">
-          <input
-            name="input-name-card"
-            type="text"
-            className="form__input form__input_name-card"
-            placeholder="Название"
-            required
-            minLength="1"
-            maxLength="30"
-            pattern="[A-Za-zА-Яа-яЁё\s\-]+"
-          />
-          <span id="input-name-card-error" className="form__input-error">
-            Ошибка
-          </span>
-        </div>
-        <div className="form__input-container">
-          <input
-            name="input-link-card"
-            type="url"
-            className="form__input form__input_link-card"
-            placeholder="Ссылка на картинку"
-            required
-          />
-          <span id="input-link-card-error" className="form__input-error">
-            Ошибка
-          </span>
-        </div>
-        <button type="submit" className="form__input-button" disabled>
-          Создать
-        </button>
-      </PopupWithForm>
 
       <PopupWithForm name="pop-up_confirm" title="Вы уверены?">
         <button
@@ -173,29 +79,6 @@ function Main({
           className="form__input-button form__input-button_comfirm"
         >
           Да
-        </button>
-      </PopupWithForm>
-
-      <PopupWithForm
-        name="pop-up_avatar"
-        title="Обновить аватар"
-        isOpen={isEditAvatarPopupOpen}
-        onClose={onClose}
-      >
-        <div className="form__input-container">
-          <input
-            name="input-link-avatar"
-            type="url"
-            className="form__input form__input_link-avatar"
-            placeholder="Ссылка на картинку"
-            required
-          />
-          <span id="input-link-avatar-error" className="form__input-error">
-            Ошибка
-          </span>
-        </div>
-        <button type="submit" className="form__input-button" disabled>
-          Сохранить
         </button>
       </PopupWithForm>
     </>

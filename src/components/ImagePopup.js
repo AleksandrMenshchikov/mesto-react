@@ -1,6 +1,6 @@
 import React from "react";
 
-function ImagePopup({ isOpen, onClose, link, description }) {
+function ImagePopup({ isOpen, onClose, selectedCard }) {
   return (
     <div className={`pop-up-image ${isOpen ? "pop-up-opened" : ""}`}>
       <figure className="pop-up-image__container">
@@ -10,9 +10,13 @@ function ImagePopup({ isOpen, onClose, link, description }) {
           aria-label="Закрыть форму"
           onClick={onClose}
         />
-        <img alt="Изображение" className="pop-up-image__img" src={link} />
+        <img
+          alt="Изображение"
+          className="pop-up-image__img"
+          src={selectedCard.link}
+        />
         <figcaption className="pop-up-image__description">
-          {description}
+          {selectedCard.name}
         </figcaption>
       </figure>
     </div>
