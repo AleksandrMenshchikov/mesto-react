@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import ConfirmDeleteCardPopup from "./ConfirmDeleteCardPopup";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import { api } from "../utils/api";
 
@@ -14,9 +15,11 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState();
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState();
   const [isImageCardPopupOpen, setIsImageCardPopupOpen] = React.useState();
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = React.useState();
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+  const [card, setCard] = React.useState({});
   const [isLoading, setLoading] = React.useState();
 
   React.useEffect(() => {
@@ -59,13 +62,8 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    api
-      .deleteCard(card._id)
-      .then(() => {
-        const newCards = cards.filter((c) => c._id !== card._id);
-        setCards(newCards);
-      })
-      .catch((err) => console.log(err));
+    setIsConfirmPopupOpen(true);
+    setCard({ ...card });
   }
 
   function handleCardClick(card) {
@@ -121,11 +119,25 @@ function App() {
       .catch((err) => console.error(err));
   }
 
+  function handleConfirmButtonClick() {
+    setLoading(true);
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        const newCards = cards.filter((c) => c._id !== card._id);
+        setCards(newCards);
+        closeAllPopups();
+        setTimeout(() => setLoading(false), 200);
+      })
+      .catch((err) => console.log(err));
+  }
+
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsImageCardPopupOpen(false);
+    setIsConfirmPopupOpen(false);
     setTimeout(() => setSelectedCard({}), 200);
   }
 
@@ -175,6 +187,12 @@ function App() {
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlace}
+          isLoading={isLoading}
+        />
+        <ConfirmDeleteCardPopup
+          isOpen={isConfirmPopupOpen}
+          onClose={closeAllPopups}
+          onButtonClick={handleConfirmButtonClick}
           isLoading={isLoading}
         />
         <Footer />
