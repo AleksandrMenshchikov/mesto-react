@@ -1,7 +1,7 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   const [name, setName] = React.useState("");
   const [link, setLink] = React.useState("");
   const formElement = React.useRef();
@@ -24,7 +24,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       setName("");
       setLink("");
     }, 200);
-  }, [onClose]);
+  }, [isOpen]);
 
   return (
     <PopupWithForm
@@ -67,7 +67,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         </span>
       </div>
       <button type="submit" className="form__input-button">
-        Создать
+        {isLoading ? "Загрузка..." : "Создать"}
       </button>
     </PopupWithForm>
   );

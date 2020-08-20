@@ -2,7 +2,7 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const currentUser = React.useContext(CurrentUserContext);
@@ -71,8 +71,8 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           Ошибка
         </span>
       </div>
-      <button type="submit" className="form__input-button" >
-        Сохранить
+      <button type="submit" className="form__input-button">
+        {isLoading ? "Загрузка..." : "Сохранить"}
       </button>
     </PopupWithForm>
   );

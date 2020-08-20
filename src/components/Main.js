@@ -1,6 +1,5 @@
 import React from "react";
 import loadingGif from "../images/loading-gif1.gif";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import Card from "./Card";
 import CurrentUserContext from "../contexts/CurrentUserContext";
@@ -72,15 +71,6 @@ function Main({
         onClose={onClose}
         selectedCard={selectedCard}
       />
-
-      <PopupWithForm name="pop-up_confirm" title="Вы уверены?">
-        <button
-          type="button"
-          className="form__input-button form__input-button_comfirm"
-        >
-          Да
-        </button>
-      </PopupWithForm>
     </>
   );
 }
