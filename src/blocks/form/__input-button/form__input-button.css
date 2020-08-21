@@ -15,12 +15,12 @@
   outline: none;
   border-radius: 2px;
   border: 1px solid #000;
-  transition: all 0.2s ease-in-out;
   box-sizing: content-box;
   padding: 0;
 }
 
 .form__input-button:hover {
+  transition: all 0.2s ease-in-out;
   background: rgba(0, 0, 0, 0.8);
 }
 
