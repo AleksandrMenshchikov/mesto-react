@@ -1,6 +1,5 @@
 import React from "react";
 import loadingGif from "../images/loading-gif1.gif";
-import ImagePopup from "./ImagePopup";
 import Card from "./Card";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 
@@ -9,9 +8,6 @@ function Main({
   onEditProfile,
   onAddPlace,
   onCardClick,
-  isImageCardPopupOpen,
-  onClose,
-  selectedCard,
   cards,
   onCardLike,
   onCardDelete,
@@ -65,12 +61,6 @@ function Main({
           ))}
         </ul>
       </section>
-
-      <ImagePopup
-        isOpen={isImageCardPopupOpen}
-        onClose={onClose}
-        selectedCard={selectedCard}
-      />
     </>
   );
 }

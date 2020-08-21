@@ -1,5 +1,6 @@
 import React from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
+import { Link } from "react-router-dom";
 
 function Card({ onCardClick, card, onCardLike, onCardDelete }) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -33,12 +34,14 @@ function Card({ onCardClick, card, onCardLike, onCardDelete }) {
         aria-label="Удалить карточку"
         onClick={handleDeleteClick}
       />
-      <div
-        className="elements__image"
-        role="img"
-        style={{ backgroundImage: `url(${card.link})` }}
-        onClick={handleClick}
-      />
+      <Link to={`/${card._id}`}>
+        <div
+          className="elements__image"
+          role="img"
+          style={{ backgroundImage: `url(${card.link})` }}
+          onClick={handleClick}
+        />
+      </Link>
       <article className="elements__item-bottom">
         <h4 className="elements__item-title">{card.name}</h4>
         <div className="elements__like-container">

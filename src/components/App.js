@@ -8,7 +8,9 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ConfirmDeleteCardPopup from "./ConfirmDeleteCardPopup";
 import CurrentUserContext from "../contexts/CurrentUserContext";
+import ImagePopup from "./ImagePopup";
 import { api } from "../utils/api";
+import { Route, useHistory, useLocation } from "react-router-dom";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState();
@@ -22,14 +24,28 @@ function App() {
   const [card, setCard] = React.useState({});
   const [isLoading, setLoading] = React.useState();
 
+  const history = useHistory();
+  const location = useLocation();
+
+  // if (location.pathname.length > 5) {
+  //   setIsImageCardPopupOpen(true);
+  // }
+
   React.useEffect(() => {
     api
       .getInitialCards()
       .then((data) => {
         setCards([...data]);
+        const hasSomeСoincidence = data.find(
+          (card) => card._id === location.pathname.slice(1)
+        );
+        if (hasSomeСoincidence) {
+          setIsImageCardPopupOpen(true);
+          setSelectedCard({ ...hasSomeСoincidence });
+        }
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [location]);
 
   React.useEffect(() => {
     api
@@ -139,18 +155,28 @@ function App() {
     setIsImageCardPopupOpen(false);
     setIsConfirmPopupOpen(false);
     setTimeout(() => setSelectedCard({}), 200);
+    setTimeout(() => history.push("/"), 200);
   }
 
   React.useEffect(() => {
-    const closePopupsByOverlay = (e) =>
-      e.target.classList.contains("pop-up-opened") ? closeAllPopups() : null;
+    const closePopupsByOverlay = (e) => {
+      if (e.target.classList.contains("pop-up-opened")) {
+        closeAllPopups();
+        setTimeout(() => history.push("/"), 200);
+      }
+    };
+
     document.addEventListener("click", closePopupsByOverlay);
     return () => document.removeEventListener("click", closePopupsByOverlay);
   });
 
   React.useEffect(() => {
-    const closePopupsByEsc = (e) =>
-      e.key === "Escape" ? closeAllPopups() : null;
+    const closePopupsByEsc = (e) => {
+      if (e.key === "Escape") {
+        closeAllPopups();
+        setTimeout(() => history.push("/"), 200);
+      }
+    };
     document.addEventListener("keydown", closePopupsByEsc);
     return () => document.removeEventListener("keydown", closePopupsByEsc);
   });
@@ -163,7 +189,6 @@ function App() {
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
-          isImageCardPopupOpen={isImageCardPopupOpen}
           onClose={closeAllPopups}
           onCardClick={handleCardClick}
           selectedCard={selectedCard}
@@ -196,6 +221,13 @@ function App() {
           isLoading={isLoading}
         />
         <Footer />
+        <Route path={`/${selectedCard._id || location.pathname.slice(1)}`}>
+          <ImagePopup
+            isOpen={isImageCardPopupOpen}
+            onClose={closeAllPopups}
+            selectedCard={selectedCard}
+          />
+        </Route>
       </CurrentUserContext.Provider>
     </div>
   );
