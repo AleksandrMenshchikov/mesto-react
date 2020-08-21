@@ -151,14 +151,14 @@ function App() {
     setIsImageCardPopupOpen(false);
     setIsConfirmPopupOpen(false);
     setTimeout(() => setSelectedCard({}), 200);
-    setTimeout(() => history.push("/"), 200);
+    setTimeout(() => history.push("/mesto-react"), 200);
   }
 
   React.useEffect(() => {
     const closePopupsByOverlay = (e) => {
       if (e.target.classList.contains("pop-up-opened")) {
         closeAllPopups();
-        setTimeout(() => history.push("/"), 200);
+        setTimeout(() => history.push("/mesto-react"), 200);
       }
     };
 
@@ -170,7 +170,7 @@ function App() {
     const closePopupsByEsc = (e) => {
       if (e.key === "Escape") {
         closeAllPopups();
-        setTimeout(() => history.push("/"), 200);
+        setTimeout(() => history.push("/mesto-react"), 200);
       }
     };
     document.addEventListener("keydown", closePopupsByEsc);
