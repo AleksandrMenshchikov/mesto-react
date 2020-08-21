@@ -76,7 +76,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
           maxLength="30"
           pattern="[A-Za-zА-Яа-яЁё\s\-]+"
           onChange={handleNameChange}
-          value={name}
+          value={name || ""}
           ref={inputName}
         />
         <span

@@ -85,7 +85,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
           maxLength="40"
           pattern="[A-Za-zА-Яа-яЁё\s\-]+"
           onChange={handleNameChange}
-          value={name}
+          value={name || ""}
           ref={inputName}
         />
         <span
@@ -110,7 +110,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
           minLength="2"
           maxLength="200"
           onChange={handleDescriptionChange}
-          value={description}
+          value={description || ""}
           ref={inputDescription}
         />
         <span

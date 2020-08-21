@@ -2,7 +2,7 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
-  const inputLinkAvatar = React.useRef();
+  const inputLinkAvatar = React.useRef("");
   const [link, setLink] = React.useState("");
   const [isDisabled, setIsDisabled] = React.useState(true);
   const [isLinkErrorVisible, setIsLinkErrorVisible] = React.useState(false);
@@ -25,7 +25,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
   }
 
   React.useEffect(() => {
-    inputLinkAvatar.current.value = "";
+    setLink("");
     setIsLinkErrorVisible(false);
     setIsDisabled(true);
   }, [isOpen]);
@@ -56,7 +56,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
           }`}
           placeholder="Ссылка на картинку"
           required
-          value={link}
+          value={link || ""}
           onChange={handleLinkChange}
         />
         <span

@@ -27,10 +27,6 @@ function App() {
   const history = useHistory();
   const location = useLocation();
 
-  // if (location.pathname.length > 5) {
-  //   setIsImageCardPopupOpen(true);
-  // }
-
   React.useEffect(() => {
     api
       .getInitialCards()
