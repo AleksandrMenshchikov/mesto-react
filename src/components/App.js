@@ -33,7 +33,7 @@ function App() {
       .then((data) => {
         setCards([...data]);
         const hasSomeСoincidence = data.find(
-          (card) => card._id === location.pathname.slice(1)
+          (card) => card._id === location.pathname.slice(13)
         );
         if (hasSomeСoincidence) {
           setIsImageCardPopupOpen(true);
@@ -217,7 +217,7 @@ function App() {
           isLoading={isLoading}
         />
         <Footer />
-        <Route path={`/${selectedCard._id || location.pathname.slice(1)}`}>
+        <Route path={`/mesto-react/${selectedCard._id || location.pathname.slice(1)}`} exact>
           <ImagePopup
             isOpen={isImageCardPopupOpen}
             onClose={closeAllPopups}
