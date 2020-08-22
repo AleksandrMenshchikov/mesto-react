@@ -22,4 +22,4 @@
 
 **MESTO-REACT**
 
-* [Ссылка на сайт](https://aleksandrmenshchikov.github.io/mesto-react/)
+* [Ссылка на сайт](https://mesto-react.web.app)
