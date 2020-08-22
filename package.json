@@ -5,7 +5,6 @@
     "email": "aleksandr.menshchikov1982@gmail.com"
   },
   "description": "The app creates cards",
-  "homepage": "https://aleksandrmenshchikov.github.io/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
