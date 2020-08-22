@@ -34,7 +34,7 @@ function Card({ onCardClick, card, onCardLike, onCardDelete }) {
         aria-label="Удалить карточку"
         onClick={handleDeleteClick}
       />
-      <Link to={`/mesto-react/${card._id}`}>
+      <Link to={`/${card._id}`}>
         <div
           className="elements__image"
           role="img"

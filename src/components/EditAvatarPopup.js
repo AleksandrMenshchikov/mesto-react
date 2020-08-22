@@ -25,7 +25,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
   }
 
   React.useEffect(() => {
-    setLink("");
+    setTimeout(() => setLink(""), 200);
     setIsLinkErrorVisible(false);
     setIsDisabled(true);
   }, [isOpen]);

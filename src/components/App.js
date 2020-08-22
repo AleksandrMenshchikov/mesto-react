@@ -33,7 +33,7 @@ function App() {
       .then((data) => {
         setCards([...data]);
         const hasSomeСoincidence = data.find(
-          (card) => card._id === location.pathname.slice(13)
+          (card) => card._id === location.pathname.slice(1)
         );
         if (hasSomeСoincidence) {
           setIsImageCardPopupOpen(true);
@@ -151,14 +151,14 @@ function App() {
     setIsImageCardPopupOpen(false);
     setIsConfirmPopupOpen(false);
     setTimeout(() => setSelectedCard({}), 200);
-    setTimeout(() => history.push("/mesto-react"), 200);
+    setTimeout(() => history.push("/"), 200);
   }
 
   React.useEffect(() => {
     const closePopupsByOverlay = (e) => {
       if (e.target.classList.contains("pop-up-opened")) {
         closeAllPopups();
-        setTimeout(() => history.push("/mesto-react"), 200);
+        setTimeout(() => history.push("/"), 200);
       }
     };
 
@@ -170,7 +170,7 @@ function App() {
     const closePopupsByEsc = (e) => {
       if (e.key === "Escape") {
         closeAllPopups();
-        setTimeout(() => history.push("/mesto-react"), 200);
+        setTimeout(() => history.push("/"), 200);
       }
     };
     document.addEventListener("keydown", closePopupsByEsc);
@@ -217,7 +217,7 @@ function App() {
           isLoading={isLoading}
         />
         <Footer />
-        <Route path={`/mesto-react/${selectedCard._id || location.pathname.slice(1)}`} exact>
+        <Route path={`/${selectedCard._id || location.pathname.slice(1)}`} exact>
           <ImagePopup
             isOpen={isImageCardPopupOpen}
             onClose={closeAllPopups}
