@@ -10,7 +10,7 @@ import ConfirmDeleteCardPopup from "./ConfirmDeleteCardPopup";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import ImagePopup from "./ImagePopup";
 import { api } from "../utils/api";
-import { Route, useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState();
@@ -23,25 +23,38 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [card, setCard] = React.useState({});
   const [isLoading, setLoading] = React.useState();
+  const [initialPath, setInitialPath] = React.useState("");
+  const [initialCard, setInitialCard] = React.useState({});
+  const [initialFriend, setInitialFriend] = React.useState({});
+  const [linkCards, setLinkCards] = React.useState("");
 
-  const history = useHistory();
   const location = useLocation();
+  const history = useHistory();
 
   React.useEffect(() => {
     api
       .getInitialCards()
       .then((data) => {
         setCards([...data]);
-        const hasSomeСoincidence = data.find(
-          (card) => card._id === location.pathname.slice(1)
+        const initCard = data.find(
+          (card) => card._id === location.pathname.slice(7)
         );
-        if (hasSomeСoincidence) {
+        if (initCard) {
           setIsImageCardPopupOpen(true);
-          setSelectedCard({ ...hasSomeСoincidence });
+          setSelectedCard({ ...initCard });
+          setInitialCard({ ...initCard });
+        }
+        const initFriend = data.find(
+          (card) => card.owner._id === location.pathname.slice(9)
+        );
+        if (initFriend) {
+          setIsImageCardPopupOpen(true);
+          setSelectedCard({ ...initFriend.owner });
+          setInitialFriend({ ...initFriend.owner });
         }
       })
       .catch((err) => console.error(err));
-  }, [location]);
+  }, []);
 
   React.useEffect(() => {
     api
@@ -78,9 +91,24 @@ function App() {
     setCard({ ...card });
   }
 
-  function handleCardClick(card) {
+  function handleCardClick(card, path) {
     setIsImageCardPopupOpen(true);
     setSelectedCard({ ...card });
+    setInitialPath(path);
+  }
+
+  function handleCardsClick(linkCardsPath) {
+    setLinkCards(linkCardsPath);
+  }
+
+  function handleFriendsClick(linkFriendsPath) {
+    setLinkCards(linkFriendsPath);
+  }
+
+  function handleCardFriendClick(cardFriend, path) {
+    setIsImageCardPopupOpen(true);
+    setSelectedCard({ ...cardFriend });
+    setInitialPath(path);
   }
 
   function handleEditAvatarClick() {
@@ -151,14 +179,25 @@ function App() {
     setIsImageCardPopupOpen(false);
     setIsConfirmPopupOpen(false);
     setTimeout(() => setSelectedCard({}), 200);
-    setTimeout(() => history.push("/"), 200);
+    if (location.pathname === "/") {
+      history.push("/");
+    } else if (linkCards) {
+      setTimeout(() => history.push(linkCards), 200);
+    } else if (initialPath) {
+      setTimeout(() => history.push(initialPath), 200);
+    } else if (initialCard) {
+      setTimeout(() => history.push("/cards"), 200);
+    } else if (initialFriend) {
+      setTimeout(() => history.push("/friends"), 200);
+    }
+    setInitialCard({});
+    setInitialFriend({});
   }
 
   React.useEffect(() => {
     const closePopupsByOverlay = (e) => {
       if (e.target.classList.contains("pop-up-opened")) {
         closeAllPopups();
-        setTimeout(() => history.push("/"), 200);
       }
     };
 
@@ -170,9 +209,9 @@ function App() {
     const closePopupsByEsc = (e) => {
       if (e.key === "Escape") {
         closeAllPopups();
-        setTimeout(() => history.push("/"), 200);
       }
     };
+
     document.addEventListener("keydown", closePopupsByEsc);
     return () => document.removeEventListener("keydown", closePopupsByEsc);
   });
@@ -185,12 +224,13 @@ function App() {
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
-          onClose={closeAllPopups}
           onCardClick={handleCardClick}
-          selectedCard={selectedCard}
           cards={cards}
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
+          onCardFriendClick={handleCardFriendClick}
+          onCardsClick={handleCardsClick}
+          onFriendsClick={handleFriendsClick}
         />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
@@ -217,13 +257,11 @@ function App() {
           isLoading={isLoading}
         />
         <Footer />
-        <Route path={`/${selectedCard._id || location.pathname.slice(1)}`} exact>
-          <ImagePopup
-            isOpen={isImageCardPopupOpen}
-            onClose={closeAllPopups}
-            selectedCard={selectedCard}
-          />
-        </Route>
+        <ImagePopup
+          isOpen={isImageCardPopupOpen}
+          onClose={closeAllPopups}
+          selectedCard={selectedCard}
+        />
       </CurrentUserContext.Provider>
     </div>
   );

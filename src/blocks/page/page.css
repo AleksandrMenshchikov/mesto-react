@@ -2,6 +2,7 @@
 @import "./__profile/page__profile.css";
 @import "./__elements/page__elements.css";
 @import "./__footer/page__footer.css";
+@import "./__links/page__links.css";
 
 .page {
   background-color: #000;

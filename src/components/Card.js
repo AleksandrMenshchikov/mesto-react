@@ -1,6 +1,6 @@
 import React from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 
 function Card({ onCardClick, card, onCardLike, onCardDelete }) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -13,9 +13,10 @@ function Card({ onCardClick, card, onCardLike, onCardDelete }) {
     isLiked ? "elements__like_active" : null
   }`;
   const listPeopleLiked = card.likes.map((item) => item.name).join(", ");
+  const { path } = useRouteMatch();
 
   function handleClick() {
-    onCardClick(card);
+    onCardClick(card, path);
   }
 
   function handleLikeClick() {
@@ -34,7 +35,7 @@ function Card({ onCardClick, card, onCardLike, onCardDelete }) {
         aria-label="Удалить карточку"
         onClick={handleDeleteClick}
       />
-      <Link to={`/${card._id}`}>
+      <Link to={`/cards/${card._id}`}>
         <div
           className="elements__image"
           role="img"

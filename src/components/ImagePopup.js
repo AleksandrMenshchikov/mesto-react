@@ -2,7 +2,7 @@ import React from "react";
 
 function ImagePopup({ isOpen, onClose, selectedCard }) {
   return (
-    <div className={`pop-up-image ${isOpen ? "pop-up-opened" : ""}`}>
+    <div className={`pop-up-image ${isOpen && "pop-up-opened"}`}>
       <figure className="pop-up-image__container">
         <button
           type="button"
@@ -13,10 +13,13 @@ function ImagePopup({ isOpen, onClose, selectedCard }) {
         <img
           alt="Изображение"
           className="pop-up-image__img"
-          src={selectedCard.link}
+          src={selectedCard.link || selectedCard.avatar}
         />
         <figcaption className="pop-up-image__description">
           {selectedCard.name}
+        </figcaption>
+        <figcaption className="pop-up-image__description">
+          {selectedCard.about}
         </figcaption>
       </figure>
     </div>

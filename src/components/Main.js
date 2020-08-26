@@ -1,7 +1,10 @@
 import React from "react";
 import loadingGif from "../images/loading-gif1.gif";
 import Card from "./Card";
+import Greeting from "./Greeting";
+import CardFriend from "./CardFriend";
 import CurrentUserContext from "../contexts/CurrentUserContext";
+import { NavLink, Route } from "react-router-dom";
 
 function Main({
   onEditAvatar,
@@ -11,8 +14,30 @@ function Main({
   cards,
   onCardLike,
   onCardDelete,
+  onCardFriendClick,
+  onCardsClick,
+  onFriendsClick,
 }) {
   const currentUser = React.useContext(CurrentUserContext);
+  const arrId = [];
+  cards.forEach((element) => {
+    if (!arrId.includes(element.owner._id)) {
+      arrId.push(element.owner._id);
+    }
+  });
+  const arrCards = [];
+  arrId.forEach((element) => {
+    const elem = cards.find((item) => item.owner._id === element);
+    arrCards.push(elem.owner);
+  });
+
+  function handleCardsClick() {
+    onCardsClick("/cards");
+  }
+
+  function handleFriendsClick() {
+    onFriendsClick("/friends");
+  }
 
   return (
     <>
@@ -48,17 +73,56 @@ function Main({
         />
       </section>
 
+      <nav className="links page__links">
+        <ul className="links__list">
+          <li className="links__item">
+            <NavLink
+              to="/cards"
+              className="links__item-link"
+              activeClassName="links__item-link_active"
+              onClick={handleCardsClick}
+            >
+              Карточки
+            </NavLink>
+            <NavLink
+              to="/friends"
+              className="links__item-link"
+              activeClassName="links__item-link_active"
+              onClick={handleFriendsClick}
+            >
+              Друзья
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+
       <section className="elements page__elements">
+        <Route path="/" exact>
+          <Greeting />
+        </Route>
         <ul className="elements__list">
-          {cards.map((card) => (
-            <Card
-              key={card._id}
-              onCardClick={onCardClick}
-              card={card}
-              onCardLike={onCardLike}
-              onCardDelete={onCardDelete}
-            />
-          ))}
+          <Route path="/cards">
+            {cards.map((card) => (
+              <Card
+                key={card._id}
+                onCardClick={onCardClick}
+                card={card}
+                onCardLike={onCardLike}
+                onCardDelete={onCardDelete}
+              />
+            ))}
+          </Route>
+          <Route path="/friends">
+            {arrCards.map((card) => {
+              return (
+                <CardFriend
+                  key={card._id}
+                  onCardFriendClick={onCardFriendClick}
+                  cardFriend={card}
+                />
+              );
+            })}
+          </Route>
         </ul>
       </section>
     </>
